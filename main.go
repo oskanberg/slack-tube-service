@@ -10,7 +10,7 @@ import (
 
 var lastStatusCheck time.Time
 
-const listenPort string = "443"
+const listenPort string = "1123"
 
 func main() {
 	initStatusCheck()

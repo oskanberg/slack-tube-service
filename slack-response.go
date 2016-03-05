@@ -1,15 +1,15 @@
 package main
 
 type Attachment struct {
-	Fallback	string
-	Color		string
-	Pretext		string
-	Text		string
+	Fallback string `json:"fallback"`
+	Color    string `json:"color"`
+	Pretext  string `json:"pretext"`
+	Text     string `json:"text"`
 }
 
 type SlackResponse struct {
-	Text		string
-	Attachments	[]Attachment
+	Text        string       `json:"text"`
+	Attachments []Attachment `json:"attachments"`
 }
 
 func mapTflLineToSlackAttachment(report Report) Attachment {

@@ -60,23 +60,25 @@ func lineStatusHandler(w http.ResponseWriter, r *http.Request) {
 
 func slackRequestHandler(w http.ResponseWriter, r *http.Request) {
 
+	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+
+	var slackResponse SlackResponse
+	var attachments []Attachment
+
 	err := r.ParseForm()
 
 	if err != nil {
-		log.Panic(err)
+		w.WriteHeader(http.StatusInternalServerError)
+		slackResponse.Text = "There was an error parsing input data"
 	}
 
 	var slackRequest = new(SlackRequest)
 	decoder := schema.NewDecoder()
 	err = decoder.Decode(slackRequest, r.PostForm)
 	if err != nil {
-		log.Panic(err)
+		w.WriteHeader(http.StatusInternalServerError)
+		slackResponse.Text = "There was an error decoding input data"
 	}
-
-	var slackResponse SlackResponse
-	var attachments []Attachment
-
-	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 
 	if slackRequest.Token != "MGFfi8oiCo4EDoQNVb0YE2gl" {
 		w.WriteHeader(http.StatusUnauthorized)
@@ -90,8 +92,10 @@ func slackRequestHandler(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 
-		tubeLine := slackRequest.Text
+		tubeLine := strings.Join(slackRequest.Text, " ")
 		fmt.Print(r.PostForm)
+
+		fmt.Print(tubeLine)
 
 		w.WriteHeader(http.StatusOK)
 		slackResponse.Text = "Slack Tube Service"

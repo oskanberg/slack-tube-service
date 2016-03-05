@@ -9,6 +9,6 @@ type SlackRequest struct {
 	User_id      string
 	User_name    string
 	Command      string
-	Text         string
+	Text         []string
 	Response_url string
 }

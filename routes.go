@@ -41,4 +41,16 @@ var routes = Routes{
 		"/api/tubestatus/{line}",
 		lineStatusHandler,
 	},
+	Route{
+		"slack-get-all-lines-status",
+		[]string{"GET"},
+		"/api/slack/tubestatus/",
+		slackRequestHandler,
+	},
+	Route{
+		"slack-get-line-status",
+		[]string{"GET"},
+		"/api/slack/tubestatus/{line}",
+		slackRequestHandler,
+	},
 }

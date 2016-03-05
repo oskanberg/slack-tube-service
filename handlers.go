@@ -57,6 +57,48 @@ func lineStatusHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func slackRequestHandler(w http.ResponseWriter, r *http.Request) {
+
+	var slackResponse SlackResponse
+	var attachments []Attachment
+
+	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+
+	if isUpdateNeeded() {
+		if err := updateStatusInformation(); err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			slackResponse.Text = "There was an error getting information from TFL"
+		}
+	}
+
+	vars := mux.Vars(r)
+	tubeLine, lineIsPresentInPath := vars["line"]
+
+	w.WriteHeader(http.StatusOK)
+	slackResponse.Text = "Slack Tube Service"
+
+	if !lineIsPresentInPath {
+		for _, line := range statuses {
+			attachments = append(attachments, mapTflLineToSlackAttachment(line))
+		}
+	} else {
+		for _, line := range statuses {
+			if strings.ToLower(line.Name) == strings.ToLower(tubeLine) {
+				attachments = append(attachments, mapTflLineToSlackAttachment(line))
+			}
+		}
+		if len(attachments) == 0 {
+			w.WriteHeader(http.StatusNotFound)
+			slackResponse.Text = "Not a recognised line."
+		}
+	}
+
+	slackResponse.Attachments = attachments
+	if err := json.NewEncoder(w).Encode(slackResponse); err != nil {
+		log.Panic(err)
+	}
+}
+
 func isUpdateNeeded() bool {
 	return time.Since(lastStatusCheck).Minutes() > minStatusPollPeriod
 }

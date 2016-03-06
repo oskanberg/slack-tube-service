@@ -16,7 +16,7 @@ type SlackResponse struct {
 func mapTflLineToSlackAttachment(report Report) Attachment {
 	var slackAttachment Attachment
 	status := report.LineStatuses[0]
-	slackAttachment.Text = mapTflStatuServerityToSlackSeverity(status.StatusSeverity).Emoji + " " + report.Name + " :: " + status.StatusSeverityDescription
+	slackAttachment.Text = mapTflStatuServerityToSlackSeverity(status.StatusSeverity).Emoji + "  *" + report.Name + "* :: " + status.StatusSeverityDescription
 	slackAttachment.Color = mapLineNameToHexColor(report.Name)
 	slackAttachment.Mrkdwn_in = []string{"text"}
 	return slackAttachment

@@ -81,7 +81,7 @@ func slackRequestHandler(w http.ResponseWriter, r *http.Request) {
 		slackResponse.Text = "There was an error decoding input data"
 	}
 
-	if slackRequest.Token != "MGFfi8oiCo4EDoQNVb0YE2gl" {
+	if !isTokenValid(slackRequest.Token) {
 		w.WriteHeader(http.StatusUnauthorized)
 		slackResponse.Text = "Unauthorised"
 	} else {
@@ -96,6 +96,7 @@ func slackRequestHandler(w http.ResponseWriter, r *http.Request) {
 		tubeLine := strings.Join(slackRequest.Text, " ")
 
 		w.WriteHeader(http.StatusOK)
+		slackResponse.Response_type = "ephemeral"
 		slackResponse.Text = fmt.Sprintf("Slack Tube Service - last updated at %s", lastStatusCheck.Format("15:04:05"))
 
 		if tubeLine == "" {
@@ -120,6 +121,10 @@ func slackRequestHandler(w http.ResponseWriter, r *http.Request) {
 	if err := json.NewEncoder(w).Encode(slackResponse); err != nil {
 		log.Panic(err)
 	}
+}
+
+func isTokenValid(token string) bool {
+	return token == "MGFfi8oiCo4EDoQNVb0YE2gl" || token == "3ndtt3r7stgpz8ewnddd46a81e"
 }
 
 func isUpdateNeeded() bool {

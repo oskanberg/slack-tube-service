@@ -1,8 +1,9 @@
 package main
 
 type SlackResponse struct {
-	Text        string       `json:"text"`
-	Attachments []Attachment `json:"attachments"`
+	Text          string       `json:"text"`
+	Response_type string       `json:"response_type"`
+	Attachments   []Attachment `json:"attachments"`
 }
 
 type Attachment struct {

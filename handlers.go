@@ -93,9 +93,6 @@ func slackRequestHandler(w http.ResponseWriter, r *http.Request) {
 		}
 
 		tubeLine := strings.Join(slackRequest.Text, " ")
-		fmt.Print(r.PostForm)
-
-		fmt.Print(tubeLine)
 
 		w.WriteHeader(http.StatusOK)
 		slackResponse.Text = "Slack Tube Service"

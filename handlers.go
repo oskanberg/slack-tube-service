@@ -95,7 +95,7 @@ func slackRequestHandler(w http.ResponseWriter, r *http.Request) {
 		tubeLine := strings.Join(slackRequest.Text, " ")
 
 		w.WriteHeader(http.StatusOK)
-		slackResponse.Text = "Slack Tube Service"
+		slackResponse.Text = fmt.Sprintf("Slack Tube Service - last updated at %s", lastStatusCheck.Format("15:04:05"))
 
 		if tubeLine == "" {
 			for _, line := range statuses {
@@ -145,5 +145,6 @@ func updateStatusInformation() error {
 	}
 
 	statuses = data
+	lastStatusCheck = time.Now()
 	return nil
 }

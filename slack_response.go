@@ -1,16 +1,16 @@
 package main
 
+type SlackResponse struct {
+	Text        string       `json:"text"`
+	Attachments []Attachment `json:"attachments"`
+}
+
 type Attachment struct {
 	Fallback  string   `json:"fallback"`
 	Color     string   `json:"color"`
 	Pretext   string   `json:"pretext"`
 	Text      string   `json:"text"`
 	Mrkdwn_in []string `json:"mrkdwn_in"`
-}
-
-type SlackResponse struct {
-	Text        string       `json:"text"`
-	Attachments []Attachment `json:"attachments"`
 }
 
 func mapTflLineToSlackAttachment(report Report) Attachment {
@@ -33,14 +33,22 @@ func createSlackText(report Report) string {
 	return slackText
 }
 
-type SlackSeverity struct {
-	Color string
-	Emoji string
+func mapLineNameToHexColor(lineName string) string {
+	return lineColors[lineName]
+}
+
+func mapTflStatuServerityToSlackSeverity(statusSeverity int) SlackSeverity {
+	return severity[statusSeverity]
 }
 
 var danger = SlackSeverity{"danger", ":rage:"}
 var warning = SlackSeverity{"warning", ":warning:"}
 var good = SlackSeverity{"good", ":grinning:"}
+
+type SlackSeverity struct {
+	Color string
+	Emoji string
+}
 
 var severity = map[int]SlackSeverity{
 	0:  danger,
@@ -63,7 +71,7 @@ var severity = map[int]SlackSeverity{
 	17: danger,
 	18: good,
 	19: good,
-	20: danger,
+	20: warning,
 }
 
 var lineColors = map[string]string{
@@ -78,12 +86,4 @@ var lineColors = map[string]string{
 	"Piccadilly":         "#003688",
 	"Victoria":           "#0098D4",
 	"Waterloo & City":    "#95CDBA",
-}
-
-func mapTflStatuServerityToSlackSeverity(statusSeverity int) SlackSeverity {
-	return severity[statusSeverity]
-}
-
-func mapLineNameToHexColor(lineName string) string {
-	return lineColors[lineName]
 }

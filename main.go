@@ -2,10 +2,11 @@ package main
 
 import (
 	"fmt"
-	"github.com/rs/cors"
 	"log"
 	"net/http"
 	"time"
+
+	"github.com/rs/cors"
 )
 
 var lastStatusCheck time.Time

@@ -43,13 +43,13 @@ var routes = Routes{
 	},
 	Route{
 		"slack-get-all-lines-status",
-		[]string{"GET"},
+		[]string{"POST"},
 		"/api/slack/tubestatus/",
 		slackRequestHandler,
 	},
 	Route{
 		"slack-get-line-status",
-		[]string{"GET"},
+		[]string{"POST"},
 		"/api/slack/tubestatus/{line}",
 		slackRequestHandler,
 	},

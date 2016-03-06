@@ -4,10 +4,11 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/gorilla/mux"
+	"github.com/gorilla/schema"
+	"log"
 	"net/http"
 	"strings"
 	"time"
-	"log"
 )
 
 const minStatusPollPeriod = 2
@@ -59,41 +60,62 @@ func lineStatusHandler(w http.ResponseWriter, r *http.Request) {
 
 func slackRequestHandler(w http.ResponseWriter, r *http.Request) {
 
+	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+
 	var slackResponse SlackResponse
 	var attachments []Attachment
 
-	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+	err := r.ParseForm()
 
-	if isUpdateNeeded() {
-		if err := updateStatusInformation(); err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
-			slackResponse.Text = "There was an error getting information from TFL"
-		}
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		slackResponse.Text = "There was an error parsing input data"
 	}
 
-	vars := mux.Vars(r)
-	tubeLine, lineIsPresentInPath := vars["line"]
+	var slackRequest = new(SlackRequest)
+	decoder := schema.NewDecoder()
+	err = decoder.Decode(slackRequest, r.PostForm)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		slackResponse.Text = "There was an error decoding input data"
+	}
 
-	w.WriteHeader(http.StatusOK)
-	slackResponse.Text = "Slack Tube Service"
-
-	if !lineIsPresentInPath {
-		for _, line := range statuses {
-			attachments = append(attachments, mapTflLineToSlackAttachment(line))
-		}
+	if slackRequest.Token != "MGFfi8oiCo4EDoQNVb0YE2gl" {
+		w.WriteHeader(http.StatusUnauthorized)
+		slackResponse.Text = "Unauthorised"
 	} else {
-		for _, line := range statuses {
-			if strings.ToLower(line.Name) == strings.ToLower(tubeLine) {
-				attachments = append(attachments, mapTflLineToSlackAttachment(line))
+
+		if isUpdateNeeded() {
+			if err := updateStatusInformation(); err != nil {
+				w.WriteHeader(http.StatusInternalServerError)
+				slackResponse.Text = "There was an error getting information from TFL"
 			}
 		}
-		if len(attachments) == 0 {
-			w.WriteHeader(http.StatusNotFound)
-			slackResponse.Text = "Not a recognised line."
+
+		tubeLine := strings.Join(slackRequest.Text, " ")
+
+		w.WriteHeader(http.StatusOK)
+		slackResponse.Text = fmt.Sprintf("Slack Tube Service - last updated at %s", lastStatusCheck.Format("15:04:05"))
+
+		if tubeLine == "" {
+			for _, line := range statuses {
+				attachments = append(attachments, mapTflLineToSlackAttachment(line))
+			}
+		} else {
+			for _, line := range statuses {
+				if strings.ToLower(line.Name) == strings.ToLower(tubeLine) {
+					attachments = append(attachments, mapTflLineToSlackAttachment(line))
+				}
+			}
+			if len(attachments) == 0 {
+				w.WriteHeader(http.StatusNotFound)
+				slackResponse.Text = "Not a recognised line."
+			}
 		}
+
+		slackResponse.Attachments = attachments
 	}
 
-	slackResponse.Attachments = attachments
 	if err := json.NewEncoder(w).Encode(slackResponse); err != nil {
 		log.Panic(err)
 	}
@@ -123,5 +145,6 @@ func updateStatusInformation() error {
 	}
 
 	statuses = data
+	lastStatusCheck = time.Now()
 	return nil
 }

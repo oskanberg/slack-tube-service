@@ -15,11 +15,22 @@ type SlackResponse struct {
 
 func mapTflLineToSlackAttachment(report Report) Attachment {
 	var slackAttachment Attachment
-	status := report.LineStatuses[0]
-	slackAttachment.Text = mapTflStatuServerityToSlackSeverity(status.StatusSeverity).Emoji + "  *" + report.Name + "* :: " + status.StatusSeverityDescription
+	slackAttachment.Text = createSlackText(report)
 	slackAttachment.Color = mapLineNameToHexColor(report.Name)
 	slackAttachment.Mrkdwn_in = []string{"text"}
 	return slackAttachment
+}
+
+func createSlackText(report Report) string {
+	slackText := ""
+	slackSeverity := mapTflStatuServerityToSlackSeverity(report.LineStatuses[0].StatusSeverity)
+	slackText = slackText + slackSeverity.Emoji
+	slackText = slackText + "  *" + report.Name + "*"
+	slackText = slackText + " :: " + report.LineStatuses[0].StatusSeverityDescription
+	if slackSeverity == danger || slackSeverity == warning {
+		slackText = slackText + "\n" + report.LineStatuses[0].Reason
+	}
+	return slackText
 }
 
 type SlackSeverity struct {

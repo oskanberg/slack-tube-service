@@ -1,0 +1,8 @@
+const listenPort string = "1123"
+
+func main() {
+	initStatusCheck()
+	router := newRouter()
+	fmt.Println("Ready, listening on port", listenPort)
+	log.Fatal(http.ListenAndServe(":"+listenPort, cors.Default().Handler(router))) // HL
+}

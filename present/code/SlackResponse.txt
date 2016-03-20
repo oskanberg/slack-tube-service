@@ -1,0 +1,13 @@
+type SlackResponse struct {
+	Text          string       `json:"text"`
+	Response_type string       `json:"response_type"`
+	Attachments   []Attachment `json:"attachments"`
+}
+
+type Attachment struct {
+	Fallback  string   `json:"fallback"`
+	Color     string   `json:"color"`
+	Pretext   string   `json:"pretext"`
+	Text      string   `json:"text"`
+	Mrkdwn_in []string `json:"mrkdwn_in"`
+}

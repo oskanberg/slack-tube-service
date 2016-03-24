@@ -27,6 +27,9 @@ _Five_o'code_special_
 * Post on Slack /slash command
 .iframe http://blog.takipi.com/how-we-used-slack-scala-and-play-to-automate-our-lunch-order/ 500 1000
 
+* Playing around with the TFL APIs
+.iframe https://api.tfl.gov.uk/ 500 1000
+
 * Slack-storming
 .image img/idea_1.png _ 550
 .image img/idea_2.png _ 550

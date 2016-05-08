@@ -35,3 +35,6 @@ Connect to that IP, port ```1123```.
 # APIs
  - ```GET /api/tubeservice/``` -> retrieve status for all the lines
  - ```GET /api/tubeservice/{line}``` -> retrieve status for a specific line (e.g. ```GET /api/tubeservice/Bakerloo```)
+
+### This is what the integration looks like:
+![Slack Integration](http://www.antoniotroina.com/downloads/tube.png)

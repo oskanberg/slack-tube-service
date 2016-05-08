@@ -1,0 +1,15 @@
+{
+  "text": "Slack Tube Service - last updated at 14:50:40", // HL
+  "response_type": "ephemeral",
+  "attachments": [
+    {
+      "fallback": "",
+      "color": "#B36305",
+      "pretext": "",
+      "text": ":grinning:  *Bakerloo* :: Good Service", // HL
+      "mrkdwn_in": [ // HL
+        "text"
+      ]
+    }
+  ]
+}

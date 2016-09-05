@@ -1,0 +1,12 @@
+[
+   {
+      Name:"Bakerloo",
+      LineStatuses:[
+         {
+            StatusSeverity:10,
+            StatusSeverityDescription:"Good Service",
+            Reason:""
+         }
+      ]
+   }
+]

@@ -1,9 +1,14 @@
+# Build & Run
+
 ## Run locally:
 ### Pre-requisite:
  - Golang installed (<https://golang.org/>)
 
 ### Run:
-```go run main.go```
+```go run *.go```
+
+In alternative:
+```go build && ./slack-tube-service```
 
 ### Access:
 Just connect to ```localhost:1123```
@@ -24,5 +29,12 @@ Just connect to ```localhost:1123```
 Just connect to ```localhost:1123```
 
 #### If using docker machine
-Find out your IP: ``` `docker-machine ip `docker-machine active` ```
+Find out your IP: ``` docker-machine ip `docker-machine active` ```
 Connect to that IP, port ```1123```.
+
+# APIs
+ - ```GET /api/tubeservice/``` -> retrieve status for all the lines
+ - ```GET /api/tubeservice/{line}``` -> retrieve status for a specific line (e.g. ```GET /api/tubeservice/Bakerloo```)
+
+### This is what the integration looks like:
+![Slack Integration](http://www.antoniotroina.com/downloads/tube.png)

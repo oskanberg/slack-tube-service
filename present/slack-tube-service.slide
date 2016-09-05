@@ -1,0 +1,77 @@
+Slack Tube Integration
+A Go REST API
+17:00 24 Mar 2016
+Tags: tfl, go, slack, integration
+
+Oliver Skånberg-Tippen
+Antonio Troina
+
+Go Advocates, ANDigital
+
+oskanberg@andigital.com
+atroina@andigital.com
+
+https://github.com/oskanberg/slack-tube-service
+
+@oskanberg
+@antoniotroina
+
+_Five_o'code_special_
+
+* Inception
+
+* Tweet on Slack /slash command
+.image img/takipi_tweet.png _ 500
+.caption _original_ [[https://twitter.com/takipid/status/687270694648983552][_Tweet_]]
+
+* Post on Slack /slash command
+.iframe http://blog.takipi.com/how-we-used-slack-scala-and-play-to-automate-our-lunch-order/ 500 1000
+
+* Playing around with the TFL APIs
+.iframe https://api.tfl.gov.uk/ 500 1000
+
+* Slack-storming
+.image img/idea_1.png _ 550
+.image img/idea_2.png _ 550
+
+* The product
+.image img/gopher_slack_tube.png
+.caption _"A_Slack_integration_to_query_TFL_APIs_and_retrieve_the_current_tube_status_for_a_specific_line_or_for_all_the_lines."_
+
+* Iterations
+
+* API
+.image img/api_1.png _ 550
+- Simple API call (GET) with querystring parameter
+- Response caching in memory
+.code code/get_response.txt
+
+* Integration with Slack/1
+- Implemented as POST call, Slack standard, more powerful
+- Created slack response struct translating alert level into colors (Slack attachments)
+.code code/SlackResponse.txt
+
+* POST response in Slack struct
+.code code/post_response_1.txt
+
+* Integration with Slack/2
+.image img/integ_0.png _ 800
+
+* Integration with Slack/3
+.image img/integ_1.png _ 600
+.image img/integ_2.png _ 600
+
+* First result
+.image img/integ_3.png _ 800
+
+* Formatting Slack response (Emoji?)
+.code code/post_response_2.txt
+
+* Current result
+.image img/integ_4.png _ 1000
+
+* Behind the scenes
+.image img/system.png _ 950
+
+* What's next?
+.image img/trello.png _ 1000

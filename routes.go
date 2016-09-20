@@ -32,26 +32,26 @@ func newRouter() *mux.Router {
 var routes = Routes{
 	Route{
 		"get-all-lines-status",
-		[]string{"GET"},
+		[]string{http.MethodGet},
 		"/api/tubestatus/",
 		lineStatusHandler,
 	},
 	Route{
 		"get-line-status",
-		[]string{"GET"},
+		[]string{http.MethodGet},
 		"/api/tubestatus/{line}",
 		lineStatusHandler,
 	},
 	Route{
 		"slack-get-all-lines-status",
-		[]string{"POST"},
+		[]string{http.MethodPost},
 		"/api/slack/tubestatus/",
 		slackRequestHandler,
 	},
 	Route{
-		"slack-get-line-status",
-		[]string{"POST"},
-		"/api/slack/tubestatus/{line}",
-		slackRequestHandler,
+		"slack-add-auth-token",
+		[]string{http.MethodPut, http.MethodDelete},
+		"/api/slack/token/{token}",
+		slackTokenRequestHandler,
 	},
 }

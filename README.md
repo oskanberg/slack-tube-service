@@ -1,3 +1,5 @@
+Travis CI: [![Build Status](https://travis-ci.org/thoeni/slack-tube-service.svg?branch=master)](https://travis-ci.org/thoeni/slack-tube-service) Circle CI: [![CircleCI](https://circleci.com/gh/thoeni/slack-tube-service.svg?style=svg)](https://circleci.com/gh/thoeni/slack-tube-service)
+
 # Build & Run
 
 ## Run locally:
@@ -33,8 +35,11 @@ Find out your IP: ``` docker-machine ip `docker-machine active` ```
 Connect to that IP, port ```1123```.
 
 # APIs
- - ```GET /api/tubeservice/``` -> retrieve status for all the lines
- - ```GET /api/tubeservice/{line}``` -> retrieve status for a specific line (e.g. ```GET /api/tubeservice/Bakerloo```)
+ - ```GET /api/tubestatus/``` -> retrieve status for all the lines
+ - ```GET /api/tubestatus/{line}``` -> retrieve status for a specific line (e.g. ```GET /api/tubestatus/Bakerloo```)
+ - ```POST /api/slack/tubestatus``` -> retrieve status for all the lines with slack-friendly formatting (uses auth token to validate slack client)
+ - ```PUT /api/slack/token/{token}``` -> adds a *slack token* to the authorised list
+ - ```DELETE /api/slack/token/{token}``` -> removes a *slack token* from the authorised list
 
 ### This is what the integration looks like:
 ![Slack Integration](http://www.antoniotroina.com/downloads/tube.png)

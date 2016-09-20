@@ -43,6 +43,7 @@ func lineStatusHandler(w http.ResponseWriter, r *http.Request) {
 			if strings.ToLower(line.Name) == strings.ToLower(tubeLine) {
 				response = append(response, mapTflLineToResponse(line))
 			}
+
 		}
 		if len(response) == 0 {
 			w.WriteHeader(http.StatusNotFound)
@@ -85,7 +86,6 @@ func slackRequestHandler(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusUnauthorized)
 		slackResponse.Text = "Unauthorised"
 	} else {
-
 		if isUpdateNeeded() {
 			if err := updateStatusInformation(); err != nil {
 				w.WriteHeader(http.StatusInternalServerError)
@@ -123,8 +123,20 @@ func slackRequestHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func isTokenValid(token string) bool {
-	return token == "MGFfi8oiCo4EDoQNVb0YE2gl" || token == "3ndtt3r7stgpz8ewnddd46a81e"
+func slackTokenRequestHandler(w http.ResponseWriter, r *http.Request) {
+	token, _ := mux.Vars(r)["token"]
+	err := validateToken(token)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+	switch r.Method {
+	case http.MethodPut:
+		addSlackToken(token)
+	case http.MethodDelete:
+		deleteSlackToken(token)
+	}
+	w.WriteHeader(http.StatusAccepted)
 }
 
 func isUpdateNeeded() bool {
